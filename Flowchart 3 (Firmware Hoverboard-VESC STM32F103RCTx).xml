@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-21T00:00:00.000Z" agent="5.0" version="20.8.16" type="device">
+  <diagram id="flowchart3" name="Firmware Hoverboard-VESC STM32F103RCTx">
+    <mxGraphModel dx="1200" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="FLOWCHART FIRMWARE HOVERBOARD-VESC (STM32F103RCTx)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="20" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- SECTION I: INITIALIZATION -->
+        <mxCell id="sec1" value="I. SYSTEM INITIALIZATION &amp; SETUP ROUTINE" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=25;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="740" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="node_start" value="START / RESET&#xa;(Catat Sumber Reset)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;" vertex="1" parent="sec1">
+          <mxGeometry x="30" y="40" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_clk" value="HAL_Init() &amp; SystemClock_Config()&#xa;(Clock 72 MHz)" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="200" y="40" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_clk_check" value="Clock Berhasil?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="390" y="30" width="110" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_periph" value="Inisialisasi Peripheral:&#xa;MX_GPIO, MX_TIM, MX_ADC, BLDC Init" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="530" y="40" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_init_check" value="TIM, ADC, Input&#xa;Siap digunakan?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="560" y="120" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_adc_start" value="Mulai ADC &amp; Interrupt&#xa;HAL_ADC_Start &amp; enable_irq()" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="340" y="130" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_safe_start" value="RESET / SAFE START&#xa;(Output OFF)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec1">
+          <mxGeometry x="120" y="130" width="150" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Sec 1 -->
+        <mxCell id="e1" edge="1" parent="sec1" source="node_start" target="node_clk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" edge="1" parent="sec1" source="node_clk" target="node_clk_check"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="YA" edge="1" parent="sec1" source="node_clk_check" target="node_periph"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="TIDAK" edge="1" parent="sec1" source="node_clk_check" target="node_safe_start"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" edge="1" parent="sec1" source="node_periph" target="node_init_check"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="YA" edge="1" parent="sec1" source="node_init_check" target="node_adc_start"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="TIDAK" edge="1" parent="sec1" source="node_init_check" target="node_safe_start"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+
+        <!-- SECTION II: MAIN LOOP -->
+        <mxCell id="sec2" value="II. MAIN LOOP / TASK SCHEDULER" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=25;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="350" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="node_while" value="while (1) Loop Utama&#xa;Baca Perintah VESC / Input Throttle" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="70" y="40" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_crc_check" value="Paket Perintah Valid&#xa;&amp; CRC Benar?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="100" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_drop" value="Buang Paket &amp;&#xa;Reset Buffer" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="260" y="120" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_payload" value="Baca Payload Perintah:&#xa;Duty, Current, ERPM, Brake Target" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="80" y="200" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_filter" value="Atur Target &amp; Haluskan:&#xa;rateLimiter16(), filtLowPass32()" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="80" y="270" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_fault_chk" value="Fault, Timeout,&#xa;atau Cutoff?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec2">
+          <mxGeometry x="110" y="340" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Sec 2 -->
+        <mxCell id="e8" edge="1" parent="sec2" source="node_while" target="node_crc_check"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="TIDAK" edge="1" parent="sec2" source="node_crc_check" target="node_drop"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="YA" edge="1" parent="sec2" source="node_crc_check" target="node_payload"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" edge="1" parent="sec2" source="node_payload" target="node_filter"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" edge="1" parent="sec2" source="node_filter" target="node_fault_chk"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+
+        <!-- SECTION III: HIGH-FREQUENCY ISR / FOC -->
+        <mxCell id="sec3" value="III. HIGH-FREQUENCY ISR / FOC (16 kHz)" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=25;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="410" y="310" width="370" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="node_isr_trig" value="TIM1/TIM8 Trigger ADC1/ADC2&#xa;DMA1_Channel1_IRQHandler()" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="80" y="40" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_calib_chk" value="offsetcount &lt; 2000?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="115" y="100" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="node_calib" value="Kalibrasi Offset ADC&#xa;update offset, offsetcount++" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="270" y="105" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_clarke" value="Clarke Transform: foc_clarke_ab_q4()&#xa;I_alpha = I_a, I_beta = (I_a + 2*I_b)/sqrt(3)" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="60" y="175" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_park" value="Park Transform: foc_park_q4()&#xa;I_d, I_q &amp; Pengendali Arus PI" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="80" y="235" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_invpark" value="Inverse Park &amp; SVPWM:&#xa;foc_centered_svpwm()" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="90" y="295" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_pwm_upd" value="Perbarui Register PWM Hardware:&#xa;TIM1-&gt;CCR1, CCR2, CCR3" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec3">
+          <mxGeometry x="80" y="355" width="210" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Sec 3 -->
+        <mxCell id="e13" edge="1" parent="sec3" source="node_isr_trig" target="node_calib_chk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" value="YA" edge="1" parent="sec3" source="node_calib_chk" target="node_calib"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" value="TIDAK" edge="1" parent="sec3" source="node_calib_chk" target="node_clarke"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e16" edge="1" parent="sec3" source="node_clarke" target="node_park"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e17" edge="1" parent="sec3" source="node_park" target="node_invpark"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e18" edge="1" parent="sec3" source="node_invpark" target="node_pwm_upd"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+
+        <!-- SECTION IV: FAULT HANDLING & SAFETY ROUTINE -->
+        <mxCell id="sec4" value="IV. FAULT HANDLING &amp; SAFETY ROUTINE" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=25;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="750" width="740" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="node_shutdown" value="Fault/Cutoff Terdeteksi: Matikan Bridge&#xa;TIM1-&gt;BDTR &amp;= ~MOE (MOE = 0)" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec4">
+          <mxGeometry x="40" y="40" width="240" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_recov_chk" value="Kondisi Pemulihan&#xa;Sudah Aman?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec4">
+          <mxGeometry x="85" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_safe_state" value="SAFE STATE / WAIT NEW CMD&#xa;(Heartbeat / WDT Reset Check)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec4">
+          <mxGeometry x="270" y="120" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_housekeeping" value="Housekeeping &amp; Proteksi:&#xa;Temperature/Battery Check, Watchdog" style="whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec4">
+          <mxGeometry x="480" y="40" width="220" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="node_pwr_off_chk" value="Power Off / Shutdown&#xa;Diminta?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" vertex="1" parent="sec4">
+          <mxGeometry x="515" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="node_end" value="END / POWER OFF&#xa;Matikan Output &amp; Simpan Konfigurasi" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;" vertex="1" parent="sec4">
+          <mxGeometry x="480" y="200" width="220" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Sec 4 -->
+        <mxCell id="e19" edge="1" parent="sec4" source="node_shutdown" target="node_recov_chk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e20" value="TIDAK" edge="1" parent="sec4" source="node_recov_chk" target="node_safe_state"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e21" edge="1" parent="sec4" source="node_housekeeping" target="node_pwr_off_chk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e22" value="YA" edge="1" parent="sec4" source="node_pwr_off_chk" target="node_end"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- CROSS-SECTION CONNECTIONS -->
+        <mxCell id="cx1" value="YA" edge="1" parent="1" source="node_fault_chk" target="node_shutdown"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="cx2" value="TIDAK" edge="1" parent="1" source="node_fault_chk" target="node_housekeeping"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="cx3" edge="1" parent="1" source="node_adc_start" target="node_while"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
